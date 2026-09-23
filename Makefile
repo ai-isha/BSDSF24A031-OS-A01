@@ -1,4 +1,8 @@
-CC = gcc
+install:
+	mkdir -p /usr/local/bin
+	mkdir -p /usr/local/share/man/man3
+	cp bin/client_dynamic /usr/local/bin/client
+	cp man/man3/mystrlen.3 /usr/local/share/man/man3/CC = gcc
 # -fPIC is strictly required for shared libraries
 CFLAGS = -Wall -Wextra -fPIC
 TARGET_DYN = bin/client_dynamic
@@ -33,3 +37,8 @@ obj/%.o : src/%.c
 
 clean:
 	rm -f obj/*.o bin/client_* lib/libmyutils.*
+install:
+	mkdir -p /usr/local/bin
+	mkdir -p /usr/local/share/man/man3
+	cp bin/client_dynamic /usr/local/bin/client
+	cp man/man3/mystrlen.3 /usr/local/share/man/man3/
