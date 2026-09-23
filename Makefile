@@ -1,20 +1,24 @@
-# Macros / Variables
+# Macros
 CC = gcc
 CFLAGS = -Wall -Wextra
-TARGET = bin/client
-OBJECTS = obj/main.o obj/mystrfunctions.o obj/myfilefunctions.o
+TARGET = bin/client_static
+LIB = lib/libmyutils.a
+LIB_OBJS = obj/mystrfunctions.o obj/myfilefunctions.o
+MAIN_OBJ = obj/main.o
 
-# Default target
 all: $(TARGET)
 
-# Linking Rule
-$(TARGET) : $(OBJECTS)
-	$(CC) $(CFLAGS) -o $(TARGET) $(OBJECTS)
+# 1. Compile final executable by linking the static library
+$(TARGET) : $(MAIN_OBJ) $(LIB)
+	$(CC) $(CFLAGS) -o $(TARGET) $(MAIN_OBJ) -L./lib -lmyutils
 
-# Compilation Rule
+# 2. Create the Static Library using 'ar'
+$(LIB) : $(LIB_OBJS)
+	ar rcs $(LIB) $(LIB_OBJS)
+
+# 3. Compile .c files to .o object files
 obj/%.o : src/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Clean Rule
 clean:
-	rm -f obj/*.o $(TARGET)
+	rm -f obj/*.o $(TARGET) $(LIB)
