@@ -1,4 +1,13 @@
-# OS Assignment - Feature 3 Report
+# OS Assignment - Feature 4 Report
+
+## 1. What is Position-Independent Code (-fPIC) and why is it a fundamental requirement for creating shared libraries?
+Position-Independent Code (`-fPIC`) generates machine code that executes properly regardless of where it is loaded in the system's memory. It is a fundamental requirement for shared libraries (`.so`) because a single shared library can be loaded by multiple different programs at the same time, and each program might load it at a different memory address. `-fPIC` ensures all memory references inside the library are relative, preventing conflicts.
+
+## 2. Explain the difference in file size between your static and dynamic clients. Why does this difference exist?
+The `client_static` executable is significantly larger than `client_dynamic`. This difference exists because during static linking, the actual machine code of the library functions (like `mystrlen`) is copied directly into the final `client_static` binary. In contrast, dynamic linking only stores a small reference (a pointer) to the shared library in `client_dynamic`. The actual code remains in the `.so` file and is only loaded into memory when the program runs, keeping the executable file small.
+
+## 3. What is the LD_LIBRARY_PATH environment variable? Why was it necessary to set it for your program to run, and what does this tell you about the responsibilities of the operating system's dynamic loader?
+`LD_LIBRARY_PATH` is an environment variable that tells the Linux dynamic loader where to look for shared libraries outside of the standard system directories (like `/usr/lib`). It was necessary to set it because our custom `libmyutils.so` was located in our local project's `/lib` folder, which the OS does not check by default. This tells us that the operating system's dynamic loader is actively responsible for finding, resolving, and mapping external dependencies into the program's memory space just before execution begins.# OS Assignment - Feature 3 Report
 
 ## 1. Compare the Makefile from Part 2 and Part 3. What are the key differences in the variables and rules that enable the creation of a static library?
 In Part 2, we linked object files (`.o`) directly to build the executable. In Part 3, we introduced a new variable `LIB = lib/libmyutils.a`. We added a new rule using the `ar rcs` command to archive the `.o` files into this static library. Finally, we changed the linking rule for the executable to use `-L./lib` (specifying the library directory) and `-lmyutils` (linking our specific library) instead of listing the object files directly.
